@@ -30,7 +30,7 @@ A library for creating and signing x509 certificates and CSRs.
 
 ```bash
 pip install asn1crypto
-pip install git+git://github.com/wbond/oscrypto.git
+pip install oscrypto
 pip install git+git://github.com/wbond/csrbuilder
 ```
 
