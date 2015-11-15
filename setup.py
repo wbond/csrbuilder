@@ -27,7 +27,7 @@ setup(
     name='csrbuilder',
     version=csrbuilder.__version__,
 
-    description='Creates and signs X509 certificates and CSRs',
+    description='Creates and signs X.509 certificate signing requests (CSRs)',
     long_description='Docs for this project are maintained at https://github.com/wbond/csrbuilder#readme.',
 
     url='https://github.com/wbond/csrbuilder',

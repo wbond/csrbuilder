@@ -1,6 +1,7 @@
 # csrbuilder
 
-A library for creating and signing X.509 certificate signing requests (CSRs).
+A Python library for creating and signing X.509 certificate signing requests
+(CSRs).
 
  - [Related Crypto Libraries](#related-crypto-libraries)
  - [Current Release](#current-release)
