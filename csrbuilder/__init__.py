@@ -479,16 +479,18 @@ class CSRBuilder(object):
         for name in sorted(self._other_extensions.keys()):
             extensions.append(_make_extension(name, self._other_extensions[name]))
 
+        attributes = []
+        if extensions:
+            attributes.append({
+                'type': 'extension_request',
+                'values': [extensions]
+            })
+
         certification_request_info = csr.CertificationRequestInfo({
             'version': 'v1',
             'subject': self._subject,
             'subject_pk_info': self._subject_public_key,
-            'attributes': [
-                {
-                    'type': 'extension_request',
-                    'values': [extensions]
-                }
-            ]
+            'attributes': attributes
         })
 
         if signing_private_key.algorithm == 'rsa':
