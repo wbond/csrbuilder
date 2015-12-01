@@ -206,6 +206,10 @@ class CSRBuilder(object):
 
     @ca.setter
     def ca(self, value):
+        if value is None:
+            self._basic_constraints = None
+            return
+
         self._basic_constraints = x509.BasicConstraints({'ca': bool(value)})
 
         if value:
