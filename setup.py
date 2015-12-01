@@ -58,8 +58,8 @@ setup(
     keywords='crypto pki x509 certificate csr',
 
     install_requires=[
-        'asn1crypto>=0.13',
-        'oscrypto>=0.12'
+        'asn1crypto>=0.15',
+        'oscrypto>=0.14'
     ],
     packages=find_packages(exclude=['tests*', 'dev*']),
 

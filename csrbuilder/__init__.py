@@ -17,8 +17,8 @@ else:
     str_cls = str
 
 
-__version__ = '0.9.1'
-__version_info = (0, 9, 1)
+__version__ = '0.10.0'
+__version_info = (0, 10, 0)
 
 
 def _writer(func):
