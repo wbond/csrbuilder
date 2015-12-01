@@ -429,6 +429,7 @@ class CSRBuilder(object):
             'extended_key_usage': False,
             'inhibit_any_policy': True,
             'subject_information_access': False,
+            'tls_feature': False,
             'ocsp_no_check': False,
         }.get(name, False)
 
