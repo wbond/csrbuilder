@@ -26,7 +26,7 @@
 > >     :param subject:
 > >         An asn1crypto.x509.Name object, or a dict - see the docstring
 > >         for .subject for a list of valid options
-> >     
+> >
 > >     :param subject_public_key:
 > >         An asn1crypto.keys.PublicKeyInfo object containing the public key
 > >         the certificate is being requested for
@@ -39,15 +39,15 @@
 >
 > > An asn1crypto.x509.Name object, or a dict with at least the
 > > following keys:
-> > 
+> >
 > >  - country_name
 > >  - state_or_province_name
 > >  - locality_name
 > >  - organization_name
 > >  - common_name
-> > 
+> >
 > > Less common keys include:
-> > 
+> >
 > >  - organizational_unit_name
 > >  - email_address
 > >  - street_address
@@ -56,9 +56,9 @@
 > >  - incorporation_locality
 > >  - incorporation_state_or_province
 > >  - incorporation_country
-> > 
+> >
 > > Uncommon keys include:
-> > 
+> >
 > >  - surname
 > >  - title
 > >  - serial_number
@@ -69,7 +69,7 @@
 > >  - dn_qualifier
 > >  - pseudonym
 > >  - domain_component
-> > 
+> >
 > > All values should be unicode strings
 >
 > ##### `.subject_public_key` attribute
@@ -117,7 +117,7 @@
 > >     :param name:
 > >         A unicode string of an extension id name from
 > >         asn1crypto.x509.ExtensionId
-> >     
+> >
 > >     :param value:
 > >         A value object per the specs defined by asn1crypto.x509.Extension
 > >     """
@@ -126,7 +126,7 @@
 > > Sets the value for an extension using a fully constructed Asn1Value
 > > object from asn1crypto. Normally this should not be needed, and the
 > > convenience attributes should be sufficient.
-> > 
+> >
 > > See the definition of asn1crypto.x509.Extension to determine the
 > > appropriate object type for a given extension. Extensions are marked
 > > as critical when RFC5280 or RFC6960 indicate so. If an extension is
@@ -142,7 +142,7 @@
 > >         An asn1crypto.keys.PrivateKeyInfo or oscrypto.asymmetric.PrivateKey
 > >         object for the private key to sign the request with. This should be
 > >         the private key that matches the public key.
-> >     
+> >
 > >     :return:
 > >         An asn1crypto.csr.CertificationRequest object of the request
 > >     """
