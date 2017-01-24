@@ -33,7 +33,7 @@ A Python library for creating and signing X.509 certificate signing requests
 
  - [*asn1crypto*](https://github.com/wbond/asn1crypto)
  - [*oscrypto*](https://github.com/wbond/oscrypto)
- - Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5 or pypy
+ - Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6 or pypy
 
 ## Installation
 
@@ -54,6 +54,7 @@ pip install csrbuilder
 
  - [Windows](https://ci.appveyor.com/project/wbond/csrbuilder/history) via AppVeyor
  - [OS X & Linux](https://travis-ci.org/wbond/csrbuilder/builds) via Travis CI
+ - [Test Coverage](https://codecov.io/gh/wbond/csrbuilder/commits) via Codecov
 
 ## Testing
 
