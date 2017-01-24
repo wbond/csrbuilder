@@ -13,6 +13,11 @@ A Python library for creating and signing X.509 certificate signing requests
  - [Testing](#testing)
  - [Development](#development)
 
+[![Travis CI](https://api.travis-ci.org/wbond/csrbuilder.svg?branch=master)](https://travis-ci.org/wbond/csrbuilder)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wbond/csrbuilder?branch=master&svg=true)](https://ci.appveyor.com/project/wbond/csrbuilder)
+[![Codecov](https://codecov.io/gh/wbond/csrbuilder/branch/master/graph/badge.svg)](https://codecov.io/gh/wbond/csrbuilder)
+[![PyPI](https://img.shields.io/pypi/v/csrbuilder.svg)](https://pypi.python.org/pypi/csrbuilder)
+
 ## Related Crypto Libraries
 
 *csrbuilder* is part of the modularcrypto family of Python packages:
