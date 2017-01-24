@@ -9,6 +9,8 @@ import textwrap
 from asn1crypto import x509, keys, csr, pem
 from oscrypto import asymmetric
 
+from .version import __version__, __version_info__
+
 if sys.version_info < (3,):
     int_types = (int, long)  # noqa
     str_cls = unicode  # noqa
@@ -17,8 +19,12 @@ else:
     str_cls = str
 
 
-__version__ = '0.10.1'
-__version_info = (0, 10, 1)
+__all__ = [
+    '__version__',
+    '__version_info__',
+    'CSRBuilder',
+    'pem_armor_csr',
+]
 
 
 def _writer(func):
