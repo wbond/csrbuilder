@@ -16,7 +16,7 @@ A Python library for creating and signing X.509 certificate signing requests
 
 [![Travis CI](https://api.travis-ci.org/wbond/csrbuilder.svg?branch=master)](https://travis-ci.org/wbond/csrbuilder)
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wbond/csrbuilder?branch=master&svg=true)](https://ci.appveyor.com/project/wbond/csrbuilder)
-[![CircleCI](https://circleci.com/gh/wbond/csr.svg?style=shield)](https://circleci.com/gh/wbond/csr)
+[![CircleCI](https://circleci.com/gh/wbond/csrbuilder.svg?style=shield)](https://circleci.com/gh/wbond/csrbuilder)
 [![Codecov](https://codecov.io/gh/wbond/csrbuilder/branch/master/graph/badge.svg)](https://codecov.io/gh/wbond/csrbuilder)
 [![PyPI](https://img.shields.io/pypi/v/csrbuilder.svg)](https://pypi.python.org/pypi/csrbuilder)
 
