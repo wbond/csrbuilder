@@ -4,6 +4,7 @@ from __future__ import unicode_literals, division, absolute_import, print_functi
 import unittest
 import re
 import sys
+import warnings
 
 from . import requires_oscrypto
 from ._import import _preload
@@ -15,6 +16,19 @@ if sys.version_info < (3,):
     from cStringIO import StringIO
 else:
     from io import StringIO
+
+
+run_args = [
+    {
+        'name': 'regex',
+        'kwarg': 'matcher',
+    },
+    {
+        'name': 'repeat_count',
+        'kwarg': 'repeat',
+        'cast': 'int',
+    },
+]
 
 
 def run(matcher=None, repeat=1, ci=False):
@@ -36,6 +50,8 @@ def run(matcher=None, repeat=1, ci=False):
     """
 
     _preload(requires_oscrypto, not ci)
+
+    warnings.filterwarnings("error")
 
     loader = unittest.TestLoader()
     # We have to manually track the list of applicable tests because for
