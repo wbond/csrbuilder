@@ -5,9 +5,9 @@ import inspect
 import re
 import sys
 import textwrap
+from functools import partial
 
 from asn1crypto import x509, keys, csr, pem
-from oscrypto import asymmetric
 
 from .version import __version__, __version_info__
 
@@ -162,19 +162,19 @@ class CSRBuilder(object):
         object of the subject's public key.
         """
 
-        is_oscrypto = isinstance(value, asymmetric.PublicKey)
-        if not isinstance(value, keys.PublicKeyInfo) and not is_oscrypto:
-            raise TypeError(_pretty_message(
-                '''
-                subject_public_key must be an instance of
-                asn1crypto.keys.PublicKeyInfo or oscrypto.asymmetric.PublicKey,
-                not %s
-                ''',
-                _type_name(value)
-            ))
-
-        if is_oscrypto:
-            value = value.asn1
+        if not isinstance(value, keys.PublicKeyInfo):
+            from oscrypto import asymmetric
+            if isinstance(value, asymmetric.PublicKey):
+                value = value.asn1
+            else:
+                raise TypeError(_pretty_message(
+                    '''
+                    subject_public_key must be an instance of
+                    asn1crypto.keys.PublicKeyInfo or oscrypto.asymmetric.PublicKey,
+                    not %s
+                    ''',
+                    _type_name(value)
+                ))
 
         self._subject_public_key = value
 
@@ -445,7 +445,8 @@ class CSRBuilder(object):
         and then signs it
 
         :param signing_private_key:
-            An asn1crypto.keys.PrivateKeyInfo or oscrypto.asymmetric.PrivateKey
+            An object with a `.sign` callable and `.algorithm` field, or
+            an asn1crypto.keys.PrivateKeyInfo or oscrypto.asymmetric.PrivateKey
             object for the private key to sign the request with. This should be
             the private key that matches the public key.
 
@@ -453,13 +454,29 @@ class CSRBuilder(object):
             An asn1crypto.csr.CertificationRequest object of the request
         """
 
-        is_oscrypto = isinstance(signing_private_key, asymmetric.PrivateKey)
-        if not isinstance(signing_private_key, keys.PrivateKeyInfo) and not is_oscrypto:
+        if hasattr(signing_private_key, 'sign') and callable(signing_private_key.sign):
+            sign_func = signing_private_key.sign
+        else:
+            from oscrypto import asymmetric
+            if isinstance(signing_private_key, keys.PrivateKeyInfo):
+                signing_private_key = asymmetric.load_private_key(signing_private_key)
+
+            if isinstance(signing_private_key, asymmetric.PrivateKey):
+                if signing_private_key.algorithm == 'rsa':
+                    sign_func = partial(asymmetric.rsa_pkcs1v15_sign, signing_private_key)
+                elif signing_private_key.algorithm == 'dsa':
+                    sign_func = partial(asymmetric.dsa_sign, signing_private_key)
+                elif signing_private_key.algorithm == 'ec':
+                    sign_func = partial(asymmetric.ecdsa_sign, signing_private_key)
+
+        if not sign_func:
             raise TypeError(_pretty_message(
                 '''
                 signing_private_key must be an instance of
                 asn1crypto.keys.PrivateKeyInfo or
-                oscrypto.asymmetric.PrivateKey, not %s
+                oscrypto.asymmetric.PrivateKey, or
+                must have a `sign` callable.
+                %s does not satisfy any of the above.
                 ''',
                 _type_name(signing_private_key)
             ))
@@ -500,16 +517,7 @@ class CSRBuilder(object):
             'attributes': attributes
         })
 
-        if signing_private_key.algorithm == 'rsa':
-            sign_func = asymmetric.rsa_pkcs1v15_sign
-        elif signing_private_key.algorithm == 'dsa':
-            sign_func = asymmetric.dsa_sign
-        elif signing_private_key.algorithm == 'ec':
-            sign_func = asymmetric.ecdsa_sign
-
-        if not is_oscrypto:
-            signing_private_key = asymmetric.load_private_key(signing_private_key)
-        signature = sign_func(signing_private_key, certification_request_info.dump(), self._hash_algo)
+        signature = sign_func(certification_request_info.dump(), self._hash_algo)
 
         return csr.CertificationRequest({
             'certification_request_info': certification_request_info,

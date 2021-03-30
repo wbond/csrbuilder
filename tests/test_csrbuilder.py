@@ -66,3 +66,39 @@ class CSRBuilderTests(unittest.TestCase):
             ['codexns.io', 'codexns.com'],
             extensions[3]['extn_value'].native
         )
+
+    def test_build_custom_key(self):
+        class CustomKeyPair:
+            _private_key = None
+            _public_key = None
+
+            def __init__(self):
+                self._public_key, self._private_key = asymmetric.generate_pair('ec', curve='secp256r1')
+
+            def sign(self, msg: bytes, hash_algo: str):
+                return asymmetric.ecdsa_sign(self._private_key, msg, hash_algo)
+
+            @property
+            def algorithm(self):
+                return "ec"
+
+            @property
+            def public_key(self):
+                return self._public_key.asn1
+
+        key_pair = CustomKeyPair()
+        builder = CSRBuilder(
+            {
+                'country_name': 'US',
+                'state_or_province_name': 'Massachusetts',
+                'locality_name': 'Newbury',
+                'organization_name': 'Codex Non Sufficit LC',
+                'common_name': 'Will Bond',
+            },
+            key_pair.public_key
+        )
+        builder.subject_alt_domains = ['codexns.io', 'codexns.com']
+        der_bytes = builder.build(key_pair).dump()
+
+        self.assertIsNotNone(der_bytes)
+
