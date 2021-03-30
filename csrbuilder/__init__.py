@@ -442,8 +442,8 @@ class CRIBuilder(object):
 
     def build(self):
         """
-        Validates the certificate information, constructs an X.509 certificate
-        and then signs it
+        Validates the certificate information, constructs an ASN1
+        CertificationRequestInfo
 
         :return:
             An asn1crypto.csr.CertificationRequestInfo object of the request
