@@ -22,6 +22,7 @@ else:
 __all__ = [
     '__version__',
     '__version_info__',
+    'CRIBuilder',
     'CSRBuilder',
     'pem_armor_csr',
 ]
@@ -63,7 +64,7 @@ def pem_armor_csr(certification_request):
     )
 
 
-class CSRBuilder(object):
+class CRIBuilder(object):
 
     _subject = None
     _subject_public_key = None
@@ -439,6 +440,46 @@ class CSRBuilder(object):
             'ocsp_no_check': False,
         }.get(name, False)
 
+    def build(self):
+        """
+        Validates the certificate information, constructs an X.509 certificate
+        and then signs it
+
+        :return:
+            An asn1crypto.csr.CertificationRequestInfo object of the request
+        """
+        def _make_extension(name, value):
+            return {
+                'extn_id': name,
+                'critical': self._determine_critical(name),
+                'extn_value': value
+            }
+
+        extensions = []
+        for name in sorted(self._special_extensions):
+            value = getattr(self, '_%s' % name)
+            if value is not None:
+                extensions.append(_make_extension(name, value))
+
+        for name in sorted(self._other_extensions.keys()):
+            extensions.append(_make_extension(name, self._other_extensions[name]))
+
+        attributes = []
+        if extensions:
+            attributes.append({
+                'type': 'extension_request',
+                'values': [extensions]
+            })
+
+        return csr.CertificationRequestInfo({
+            'version': 'v1',
+            'subject': self._subject,
+            'subject_pk_info': self._subject_public_key,
+            'attributes': attributes
+        })
+
+
+class CSRBuilder(CRIBuilder):
     def build(self, signing_private_key):
         """
         Validates the certificate information, constructs an X.509 certificate
@@ -470,36 +511,6 @@ class CSRBuilder(object):
 
         signature_algorithm_id = '%s_%s' % (self._hash_algo, signature_algo)
 
-        def _make_extension(name, value):
-            return {
-                'extn_id': name,
-                'critical': self._determine_critical(name),
-                'extn_value': value
-            }
-
-        extensions = []
-        for name in sorted(self._special_extensions):
-            value = getattr(self, '_%s' % name)
-            if value is not None:
-                extensions.append(_make_extension(name, value))
-
-        for name in sorted(self._other_extensions.keys()):
-            extensions.append(_make_extension(name, self._other_extensions[name]))
-
-        attributes = []
-        if extensions:
-            attributes.append({
-                'type': 'extension_request',
-                'values': [extensions]
-            })
-
-        certification_request_info = csr.CertificationRequestInfo({
-            'version': 'v1',
-            'subject': self._subject,
-            'subject_pk_info': self._subject_public_key,
-            'attributes': attributes
-        })
-
         if signing_private_key.algorithm == 'rsa':
             sign_func = asymmetric.rsa_pkcs1v15_sign
         elif signing_private_key.algorithm == 'dsa':
@@ -509,6 +520,9 @@ class CSRBuilder(object):
 
         if not is_oscrypto:
             signing_private_key = asymmetric.load_private_key(signing_private_key)
+
+        certification_request_info = super().build()
+
         signature = sign_func(signing_private_key, certification_request_info.dump(), self._hash_algo)
 
         return csr.CertificationRequest({
