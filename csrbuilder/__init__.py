@@ -68,7 +68,6 @@ class CRIBuilder(object):
 
     _subject = None
     _subject_public_key = None
-    _hash_algo = None
     _basic_constraints = None
     _subject_alt_name = None
     _key_usage = None
@@ -84,7 +83,7 @@ class CRIBuilder(object):
 
     def __init__(self, subject, subject_public_key):
         """
-        Unless changed, CSRs will use SHA-256 for the signature
+        Unless changed, CRI will not include the CA extension.
 
         :param subject:
             An asn1crypto.x509.Name object, or a dict - see the docstring
@@ -99,7 +98,6 @@ class CRIBuilder(object):
         self.subject_public_key = subject_public_key
         self.ca = False
 
-        self._hash_algo = 'sha256'
         self._other_extensions = {}
 
     @_writer
@@ -181,23 +179,6 @@ class CRIBuilder(object):
 
         self._key_identifier = self._subject_public_key.sha1
         self._authority_key_identifier = None
-
-    @_writer
-    def hash_algo(self, value):
-        """
-        A unicode string of the hash algorithm to use when signing the
-        request - "sha1" (not recommended), "sha256" or "sha512"
-        """
-
-        if value not in set(['sha1', 'sha256', 'sha512']):
-            raise ValueError(_pretty_message(
-                '''
-                hash_algo must be one of "sha1", "sha256", "sha512", not %s
-                ''',
-                repr(value)
-            ))
-
-        self._hash_algo = value
 
     @property
     def ca(self):
@@ -480,6 +461,42 @@ class CRIBuilder(object):
 
 
 class CSRBuilder(CRIBuilder):
+
+    _hash_algo = None
+
+    def __init__(self, subject, subject_public_key):
+        """
+        Unless changed, CSRs will use SHA-256 for the signature
+
+        :param subject:
+            An asn1crypto.x509.Name object, or a dict - see the docstring
+            for .subject for a list of valid options
+
+        :param subject_public_key:
+            An asn1crypto.keys.PublicKeyInfo object containing the public key
+            the certificate is being requested for
+        """
+        super().__init__(subject, subject_public_key)
+
+        self._hash_algo = 'sha256'
+
+    @_writer
+    def hash_algo(self, value):
+        """
+        A unicode string of the hash algorithm to use when signing the
+        request - "sha1" (not recommended), "sha256" or "sha512"
+        """
+
+        if value not in set(['sha1', 'sha256', 'sha512']):
+            raise ValueError(_pretty_message(
+                '''
+                hash_algo must be one of "sha1", "sha256", "sha512", not %s
+                ''',
+                repr(value)
+            ))
+
+        self._hash_algo = value
+
     def build(self, signing_private_key):
         """
         Validates the certificate information, constructs an X.509 certificate
