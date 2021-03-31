@@ -164,9 +164,7 @@ class CSRBuilder(object):
 
         if not isinstance(value, keys.PublicKeyInfo):
             from oscrypto import asymmetric
-            if isinstance(value, asymmetric.PublicKey):
-                value = value.asn1
-            else:
+            if not isinstance(value, asymmetric.PublicKey):
                 raise TypeError(_pretty_message(
                     '''
                     subject_public_key must be an instance of
@@ -175,6 +173,7 @@ class CSRBuilder(object):
                     ''',
                     _type_name(value)
                 ))
+            value = value.asn1
 
         self._subject_public_key = value
 
