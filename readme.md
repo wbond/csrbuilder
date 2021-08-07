@@ -15,10 +15,7 @@ A Python library for creating and signing X.509 certificate signing requests
  - [CI Tasks](#ci-tasks)
 
 [![GitHub Actions CI](https://github.com/wbond/csrbuilder/workflows/CI/badge.svg)](https://github.com/wbond/csrbuilder/actions?workflow=CI)
-[![Travis CI](https://api.travis-ci.org/wbond/csrbuilder.svg?branch=master)](https://travis-ci.org/wbond/csrbuilder)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wbond/csrbuilder?branch=master&svg=true)](https://ci.appveyor.com/project/wbond/csrbuilder)
 [![CircleCI](https://circleci.com/gh/wbond/csrbuilder.svg?style=shield)](https://circleci.com/gh/wbond/csrbuilder)
-[![Codecov](https://codecov.io/gh/wbond/csrbuilder/branch/master/graph/badge.svg)](https://codecov.io/gh/wbond/csrbuilder)
 [![PyPI](https://img.shields.io/pypi/v/csrbuilder.svg)](https://pypi.python.org/pypi/csrbuilder)
 
 ## Related Crypto Libraries
@@ -41,7 +38,7 @@ A Python library for creating and signing X.509 certificate signing requests
 
  - [*asn1crypto*](https://github.com/wbond/asn1crypto)
  - [*oscrypto*](https://github.com/wbond/oscrypto)
- - Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8 or pypy
+ - Python 2.6, 2.7, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9 or pypy
 
 ## Installation
 
@@ -60,10 +57,8 @@ pip install csrbuilder
 
 ## Continuous Integration
 
- - [Windows](https://ci.appveyor.com/project/wbond/csrbuilder/history) via AppVeyor
- - [OS X](https://circleci.com/gh/wbond/csrbuilder) via CircleCI
- - [Linux](https://travis-ci.org/wbond/csrbuilder/builds) via Travis CI
- - [Test Coverage](https://codecov.io/gh/wbond/csrbuilder/commits) via Codecov
+ - [macOS, Linux, Windows](https://github.com/wbond/csrbuilder/actions/workflows/ci.yml) via GitHub Actions
+ - [arm64](https://circleci.com/gh/wbond/csrbuilder) via CircleCI
 
 ## Testing
 
